@@ -62,7 +62,7 @@ volumes:
 networks:
   library:
     driver: overlay
-   
+    attachable: true
 ...
 
 # docker push kondarao/library:db

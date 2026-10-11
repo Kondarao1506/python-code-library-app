@@ -9,7 +9,7 @@ services:
     networks:
     - library
     volumes:
-    - mydata: /var/lib/mysql
+     - mydata:/var/lib/mysql
 
   auth_service:
     image: kondarao/library:authimg

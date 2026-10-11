@@ -1,15 +1,15 @@
----
+
 services:
   db:
     image: kondarao/library:db
     ports:
-    - "3306:3306"
+      - "3306:3306"
     deploy:
       replicas: 2
     networks:
-    - library
+      - library
     volumes:
-     - mydata:/var/lib/mysql
+      - mydata:/var/lib/mysql
 
   auth_service:
     image: kondarao/library:authimg
@@ -21,7 +21,6 @@ services:
       - library
     depends_on:
       - db
-    
 
   book_service:
     image: kondarao/library:bookimg
@@ -33,6 +32,7 @@ services:
       - library
     depends_on:
       - db
+
   borrow_service:
     image: kondarao/library:borrowimg
     deploy:
@@ -56,83 +56,11 @@ services:
       - auth_service
       - book_service
       - borrow_service
+
 volumes:
- mydata:
+  mydata:
 
 networks:
   library:
     driver: overlay
     attachable: true
-...
-
-# docker push kondarao/library:db
-#                          docker push kondarao/library:authimg
-#                          docker push kondarao/library:bookimg
-#                          docker push kondarao/library:borrowimg
-#                          docker push kondarao/library:appimg
-
-
-
-
-
-
-# ---
-# services:
-#   db:
-#     image: shaikmustafa/arshad:db
-#     deploy:
-#       replicas: 1
-#     ports:
-#       - "3306:3306"
-#     networks:
-#       - mynetwork
-
-#   auth_service:
-#     image: shaikmustafa/arshad:auth
-#     deploy:
-#       replicas: 1
-#     ports:
-#       - "5001:5001"
-#     networks:
-#       - mynetwork
-#     depends_on:
-#       - db
-    
-
-#   book_service:
-#     image: shaikmustafa/arshad:book
-#     deploy:
-#       replicas: 1
-#     ports:
-#       - "5002:5002"
-#     networks:
-#       - mynetwork
-#     depends_on:
-#       - db
-#   borrow_service:
-#     image: shaikmustafa/arshad:borrow
-#     deploy:
-#       replicas: 1
-#     ports:
-#       - "5003:5003"
-#     networks:
-#       - mynetwork
-#     depends_on:
-#       - db
-
-#   frontend:
-#     image: shaikmustafa/arshad:frontend
-#     deploy:
-#       replicas: 1
-#     ports:
-#       - "5000:5000"
-#     networks:
-#       - mynetwork
-#     depends_on:
-#       - auth_service
-#       - book_service
-#       - borrow_service
-
-# networks:
-#   mynetwork:
-#     driver: bridge

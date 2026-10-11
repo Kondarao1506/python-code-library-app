@@ -56,6 +56,8 @@ services:
       - auth_service
       - book_service
       - borrow_service
+volumes:
+ mydata:
 
 networks:
   library:

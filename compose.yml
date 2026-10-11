@@ -1,60 +1,136 @@
 ---
 services:
   db:
-    image: shaikmustafa/arshad:db
-    deploy:
-      replicas: 1
+    image: kondarao/library:db
     ports:
-      - "3306:3306"
+    - "3306:3306"
+    deploy:
+      replicas: 2
     networks:
-      - mynetwork
+    - library
+    volumes:
+    - mydata: /var/lib/mysql
 
   auth_service:
-    image: shaikmustafa/arshad:auth
+    image: kondarao/library:authimg
     deploy:
-      replicas: 1
+      replicas: 2
     ports:
       - "5001:5001"
     networks:
-      - mynetwork
+      - library
     depends_on:
       - db
     
 
   book_service:
-    image: shaikmustafa/arshad:book
+    image: kondarao/library:bookimg
     deploy:
-      replicas: 1
+      replicas: 2
     ports:
       - "5002:5002"
     networks:
-      - mynetwork
+      - library
     depends_on:
       - db
   borrow_service:
-    image: shaikmustafa/arshad:borrow
+    image: kondarao/library:borrowimg
     deploy:
-      replicas: 1
+      replicas: 2
     ports:
       - "5003:5003"
     networks:
-      - mynetwork
+      - library
     depends_on:
       - db
 
   frontend:
-    image: shaikmustafa/arshad:frontend
+    image: kondarao/library:appimg
     deploy:
-      replicas: 1
+      replicas: 2
     ports:
       - "5000:5000"
     networks:
-      - mynetwork
+      - library
     depends_on:
       - auth_service
       - book_service
       - borrow_service
 
 networks:
-  mynetwork:
-    driver: bridge
+  library:
+    driver: overlay
+   
+...
+
+# docker push kondarao/library:db
+#                          docker push kondarao/library:authimg
+#                          docker push kondarao/library:bookimg
+#                          docker push kondarao/library:borrowimg
+#                          docker push kondarao/library:appimg
+
+
+
+
+
+
+# ---
+# services:
+#   db:
+#     image: shaikmustafa/arshad:db
+#     deploy:
+#       replicas: 1
+#     ports:
+#       - "3306:3306"
+#     networks:
+#       - mynetwork
+
+#   auth_service:
+#     image: shaikmustafa/arshad:auth
+#     deploy:
+#       replicas: 1
+#     ports:
+#       - "5001:5001"
+#     networks:
+#       - mynetwork
+#     depends_on:
+#       - db
+    
+
+#   book_service:
+#     image: shaikmustafa/arshad:book
+#     deploy:
+#       replicas: 1
+#     ports:
+#       - "5002:5002"
+#     networks:
+#       - mynetwork
+#     depends_on:
+#       - db
+#   borrow_service:
+#     image: shaikmustafa/arshad:borrow
+#     deploy:
+#       replicas: 1
+#     ports:
+#       - "5003:5003"
+#     networks:
+#       - mynetwork
+#     depends_on:
+#       - db
+
+#   frontend:
+#     image: shaikmustafa/arshad:frontend
+#     deploy:
+#       replicas: 1
+#     ports:
+#       - "5000:5000"
+#     networks:
+#       - mynetwork
+#     depends_on:
+#       - auth_service
+#       - book_service
+#       - borrow_service
+
+# networks:
+#   mynetwork:
+#     driver: bridge
